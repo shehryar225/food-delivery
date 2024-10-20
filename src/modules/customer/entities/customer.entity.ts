@@ -1,8 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { JwtService } from '@nestjs/jwt';
-import { UserRole } from "enums/userRoles.enum";
-
-@Entity()
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { UserRole } from "src/enums/userRoles.enum";
+import * as bcrypt from 'bcrypt';
+@Entity({name:"customer"})
 export class Customer {
 
     @PrimaryGeneratedColumn()
@@ -46,16 +45,19 @@ export class Customer {
       })
       updatedAt: Date;
 
-    
-    //  generateTempToken(obj:,jwtservice:JwtService): string {
-        
-    //     try{
-    //             const payload={id:obj.id,email:obj.email,role:obj.role}
-    //             return jwtservice.sign(payload,{expiresIn:obj.expiresIn})
 
-    //     }catch(err)
-    //     {
-    //         throw err
-    //     }
-    //         }
+
+
+      @BeforeInsert()
+      @BeforeUpdate()
+      async hashPassword()
+      {
+        console.log(this.password)
+        if (this.password && !this.password.startsWith('$2b$')) {  
+            this.password = await bcrypt.hash(this.password, 10);
+            console.log("Password hashed:", this.password);
+        }
+      }
+
+    
 }

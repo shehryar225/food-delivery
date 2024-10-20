@@ -1,9 +1,9 @@
-import { UserRole } from "enums/userRoles.enum";
+import { UserRole } from "src/enums/userRoles.enum";
 
 
-interface tempToken{
+
+export interface tempToken{
     id:number,
-    email:string,
-    role:UserRole,
-    expiresIn:string
+    type:string,
+    expiresIn?:string
 }

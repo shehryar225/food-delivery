@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { RestuarentService } from './restuarent.service';
 import { CreateRestuarentDto } from './dto/create-restuarent.dto';
-import { UpdateRestuarentDto } from './dto/update-restuarent.dto';
 
 @Controller('restuarent')
 export class RestuarentController {
@@ -22,10 +21,10 @@ export class RestuarentController {
     return this.restuarentService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRestuarentDto: UpdateRestuarentDto) {
-    return this.restuarentService.update(+id, updateRestuarentDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateRestuarentDto: UpdateRestuarentDto) {
+  //   return this.restuarentService.update(+id, updateRestuarentDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

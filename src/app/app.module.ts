@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
-import { CustomerModule } from 'modules/customer/customer.module';
-import { AuthModule } from 'modules/auth/auth.module';
+import { RestuarentModule } from 'src/modules/restuarent/restuarent.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { CustomerModule } from 'src/modules/customer/customer.module';
+import { ConfigModule } from 'src/config/config.module';
+import { AdminModule } from 'src/modules/admin/admin.module';
 
 @Module({
-  imports: [ConfigModule,AuthModule,CustomerModule],
+  imports: [ConfigModule,CustomerModule,AuthModule,RestuarentModule,AdminModule],
   controllers: [AppController],
   providers: [AppService],
 })

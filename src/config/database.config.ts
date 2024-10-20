@@ -14,7 +14,8 @@ export const getDatabaseConfig = (configService: ConfigService): DataSourceOptio
   database: configService.get('DB_DATABASE'),
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: [`${__dirname}/src/database/migrations/*.{ts,js}`],
-  synchronize:configService.get('DB_DATABASE')==="development"?false:true, // Only for development; use migrations for production
+  synchronize:true,
+  logging:true
 });
 
 
