@@ -194,7 +194,7 @@ async verifyResetEmail(param,body:restPasswordDto):Promise<{message:string}>
     try{
 
     return this.jwtService.verify(token, {
-        secret : "asdsadasdasdasassadfsdfsdfsdf"
+        secret : process.env.JWT_SECRET_KEY
     });
     
     } catch (error) {

@@ -47,11 +47,6 @@ export class RestuarentService {
   async getRestuarents(query:any)
   {
 
-    // const getRestuarent=await this.restuarentRepository.find();
-
-    // return {
-    //   data:getRestuarent
-    // }
     try{
       const { page=1, limit=10, sort, filter } = query;
 
@@ -69,12 +64,14 @@ export class RestuarentService {
       // parent:"restuarant",
       // relations: ["menu",'menugroup',"menuItems"], // Get relations from query
       // console.log(relations.split(','))
+      const parent='restuarant'
       const apiFeatures = new ApiiFeatures(queryBuilder, {
         page: (page * 1),
         limit: (limit * 1),
         sort,
         filter,
-        relationMap
+        relationMap,
+        parent
       });
   
       // Load relations, apply filters, sorting, and paginate

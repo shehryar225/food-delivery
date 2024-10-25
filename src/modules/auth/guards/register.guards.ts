@@ -15,8 +15,7 @@ export class RegisterGuard implements CanActivate
         const { email } = request.body;
 
         const userExists = await this.customerservice.findOneByEmail(email);
-        
-        console.log(userExists)
+         
         if (userExists) {
             throw new ConflictException(`Email already Exist`);
         }

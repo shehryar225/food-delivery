@@ -11,7 +11,10 @@ import { RegisterGuard } from './guards/register.guards';
 import { LoginGuard } from './guards/login.guards';
 import {  AuthsGuard } from './guards/auth.guards';
 import { WsJWTGuard } from './guards/chatAuth.guard';
+import { ConfigService } from '@nestjs/config';
 
+const configService = new ConfigService();
+console.log("JWT Token",configService.get('JWT_SECRET_KEY'))
 
 @Module({
   imports: [
