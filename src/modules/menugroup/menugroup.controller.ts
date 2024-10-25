@@ -1,17 +1,23 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { MenugroupService } from './menugroup.service';
-import { CreateMenugroupDto } from './dto/create-menugroup.dto';
+import { CreateMenuGroupDto } from './dto/create-menugroup.dto';
 
 
-@Controller('menugroup')
+@Controller('/restuarent/menu')
 export class MenugroupController {
   constructor(private readonly menugroupService: MenugroupService) {}
 
-  // @Post()
-  // create(@Body() createMenugroupDto: CreateMenugroupDto) {
-  //   return this.menugroupService.create(createMenugroupDto);
-  // }
 
+  @Post("/:menuid/menugroup")
+  create(@Param('menuid') menuId: string,@Body() createMenugroupDto: CreateMenuGroupDto) {
+    return this.menugroupService.create(menuId,createMenugroupDto);
+  }
+
+  @Delete("/menugroup/:id")
+  delete(@Param('id') id: string,)
+  {
+    return this.menugroupService.delete(id)
+  }
   // @Get()
   // findAll() {
   //   return this.menugroupService.findAll();

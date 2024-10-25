@@ -20,6 +20,7 @@ export class LoginGuard implements CanActivate
 
         const userExists = await this.customerservice.findOneByEmail(email);
         
+
         if(!userExists) throw new UnauthorizedException("Email not Found")
 
         request.data=userExists

@@ -10,23 +10,37 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const errorResponse:any = exception.getResponse();
 
+   
     if (status === HttpStatus.BAD_REQUEST) {
+        if (Array.isArray(errorResponse['message'])) {
+            const formattedErrors = errorResponse['message'].reduce((acc: any, error: ValidationError) => {
+                acc[error.property] = Object.values(error.constraints);
+                return acc;
+            }, {});
 
-        console.log(errorResponse)
+            const formattedResponse = {
+                message: 'Validation failed',
+                errors: formattedErrors,
+                statusCode: status,
+            };
+            return response.status(status).json(formattedResponse);
+        }
+
         const formattedResponse = {
             message: errorResponse['message'] || 'Validation failed',
             errors: errorResponse['errors'] || {},
             statusCode: status,
         };
-        response.status(status).json(formattedResponse);
-    } else {
-        response.status(status).json({
-            statusCode: status,
-            timestamp: new Date().toISOString(),
-            path: errorResponse.url,
-            message: exception.message,
-        });
+        return response.status(status).json(formattedResponse);
     }
+
+    // Default response for other HTTP exceptions
+    response.status(status).json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        path: response.req.url,
+        message: errorResponse['message'] || exception.message,
+    });
   }
 
 }

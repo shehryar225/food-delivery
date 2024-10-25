@@ -1,16 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 
-@Controller('menu')
+import { Roles } from 'src/common/decorators/role.decorators';
+import { UserRole } from 'src/enums/userRoles.enum';
+
+@Controller('restuarent/menu')
+
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
-  // @Post()
-  // create(@Body() createMenuDto: CreateMenuDto) {
-  //   return this.menuService.create(createMenuDto);
-  // }
+  @Post(":id/create")
+  create(@Param('id') id:string, @Body() createMenuDto: CreateMenuDto) {
+    return this.menuService.create(id,createMenuDto);
+  }
 
+  @Get("")
+  get()
+  {
+    return this.menuService.getMenu();
+  }
+
+  @Get("/:id")
+  getOne(@Param("id") id:string)
+  {
+    return this.menuService.getOneMenu(id)
+  }
   // @Get()
   // findAll() {
   //   return this.menuService.findAll();

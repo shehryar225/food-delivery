@@ -1,20 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, Query } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
+import { Roles } from 'src/common/decorators/role.decorators';
+import { UserRole } from 'src/enums/userRoles.enum';
+import { AuthsGuard } from '../auth/guards/auth.guards';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('customer')
+@UseGuards(AuthsGuard,RolesGuard)
 export class CustomerController {
   constructor(private  customerService: CustomerService) {}
 
+  @Get("me")
+  @Roles(UserRole.USER)
+  getProfile(@Req() req:Request)
+  {
+        return this.customerService.profile(req)
+  }
   // @Post()
   // create(@Body() createCustomerDto: CreateCustomerDto) {
   //   return this.customerService.create(createCustomerDto);
   // }
 
-  // @Get()
-  // findAll() {
-  //   return this.customerService.findAll();
-  // }
+ 
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {

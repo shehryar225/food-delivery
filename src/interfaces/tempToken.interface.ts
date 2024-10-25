@@ -1,9 +1,9 @@
-import { UserRole } from "src/enums/userRoles.enum";
+
 
 
 
 export interface tempToken{
-    id:number,
+    id:string,
     type:string,
     expiresIn?:string
 }

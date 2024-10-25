@@ -1,4 +1,6 @@
-import { IsString, IsEmail, IsNotEmpty, IsEmpty, Matches, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsEmail, IsNotEmpty, Matches } from 'class-validator';
+
 
 
 
@@ -55,5 +57,11 @@ export class registrationDto extends loginDto
    
     @IsEmail({})
     @IsNotEmpty()
-    email: string;
+    email: string
+
+    @IsString()
+    @Matches(/^\d{11}$/, { message: 'Phone number must be exactly 11 digits.' })
+    @IsNotEmpty()
+    phoneNumber:string
+
 }

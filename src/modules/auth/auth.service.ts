@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Customer } from '../customer/entities/customer.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,8 +19,6 @@ export class AuthService {
   { 
     try{
 
-      console.log(body)
-
       const newUser = this.customerRepository.create(body);
 
       const user= await this.customerRepository.save(newUser)
@@ -33,7 +31,7 @@ export class AuthService {
     } 
     catch(err)
     {
-        throw err
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
   }
@@ -70,7 +68,7 @@ export class AuthService {
   {
     console.log("An erro occurs",err)
     
-    throw err
+    throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 } 
 
@@ -85,13 +83,13 @@ async login(body:loginDto,existUser:any):Promise<any>
 
     if(!(await bcrypt.compare(password,existUser.password))) throw new UnauthorizedException(`Invalid Credentials`);  
 
-    const generateJwt=this.generateToken({username:existUser.userName,email:existUser.email,role:existUser.role,expiresIn:'1h'})
+    const generateJwt=this.generateToken({id:existUser.id,username:existUser.userName,email:existUser.email,role:existUser.role,expiresIn:'1h'})
   
     return createResponse(undefined,`User Logged In`,HttpStatus.OK,generateJwt)  
   }
   catch(err)
   {
-    throw err
+    throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -113,7 +111,7 @@ async resedEmail(email:string):Promise<{message:string}>
     }
     catch(err)
     {
-        throw err
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }    
 }
 
@@ -134,7 +132,7 @@ async resentPasswordRequest(email:string):Promise<{message:string}>
     }
     catch(err)
     {
-        throw err
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     } 
 }
 
@@ -168,7 +166,7 @@ async verifyResetEmail(param,body:restPasswordDto):Promise<{message:string}>
     catch(err)
     {
         console.log("An Error Occurs ",err)
-        throw err
+        throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }  
 
 }
@@ -182,12 +180,12 @@ async verifyResetEmail(param,body:restPasswordDto):Promise<{message:string}>
 
     }catch(err)
     {
-        throw err
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   generateToken(obj): string {
-    const payload = { username:obj.username,email:obj.email,role:obj.role }; 
+    const payload = {id:obj.id ,username:obj.username,email:obj.email,role:obj.role }; 
     return this.jwtService.sign(payload,{ expiresIn: obj.expiresIn }); 
   }
 
@@ -196,7 +194,7 @@ async verifyResetEmail(param,body:restPasswordDto):Promise<{message:string}>
     try{
 
     return this.jwtService.verify(token, {
-        secret : process.env.JWT_SECRET_KEY
+        secret : "asdsadasdasdasassadfsdfsdfsdf"
     });
     
     } catch (error) {

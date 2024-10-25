@@ -6,12 +6,12 @@ import { CreateOrderstatusDto } from './dto/create-orderstatus.dto';
 export class OrderstatusController {
   constructor(private readonly orderstatusService: OrderstatusService) {}
 
-  @Post()
+  @Post("create")
   create(@Body() createOrderstatusDto: CreateOrderstatusDto) {
-    return this.orderstatusService.create(createOrderstatusDto);
+    return this.orderstatusService.addOrderStatus(createOrderstatusDto);
   }
 
-  @Get()
+  @Get("orderstatus")
   findAll() {
     return this.orderstatusService.findAll();
   }

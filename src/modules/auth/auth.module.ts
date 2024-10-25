@@ -10,18 +10,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RegisterGuard } from './guards/register.guards';
 import { LoginGuard } from './guards/login.guards';
 import {  AuthsGuard } from './guards/auth.guards';
+import { WsJWTGuard } from './guards/chatAuth.guard';
 
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY , 
+      secret: "asdsadasdasdasassadfsdfsdfsdf", 
       signOptions: { expiresIn: '1h' },
     }),
     TypeOrmModule.forFeature([Customer]),
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy,CustomerService,RegisterGuard,LoginGuard,AuthsGuard],
-  exports:[AuthService,JwtModule]
+  providers: [AuthService,JwtStrategy,CustomerService,RegisterGuard,LoginGuard,AuthsGuard,WsJWTGuard],
+  exports:[AuthService,JwtModule,AuthsGuard,WsJWTGuard]
 })
 export class AuthModule {}

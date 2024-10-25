@@ -1,11 +1,13 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserRole } from "src/enums/userRoles.enum";
 import * as bcrypt from 'bcrypt';
+import { Order } from "src/modules/order/entities/order.entity";
+import { Chat } from "src/modules/chat/entities/chat.entity";
 @Entity({name:"customer"})
 export class Customer {
 
-    @PrimaryGeneratedColumn()
-    id:number
+    @PrimaryGeneratedColumn("uuid")
+    id:string
 
     @Column({type:"varchar", length:225,name:"first_name",nullable:false})
     firstName:string
@@ -20,6 +22,9 @@ export class Customer {
     @Column({type:'varchar', length: 255,name:"password"})
     password:string
 
+    @Column({type:'varchar', length: 255,name:"phone_number",nullable:false,unique:true})
+    phoneNumber: string;
+
     @Column({type:'boolean',name:"is_verified",default:false})
     isVerified:boolean
 
@@ -29,6 +34,11 @@ export class Customer {
     @Column({ type: 'timestamp', nullable: true,name:"password_update_at" }) 
     passwordUpdatedAt: Date;
 
+    @OneToMany(()=> Order,(order)=>order.customer,{cascade:true})
+    order:Order[]
+
+    @OneToMany(()=>Chat,(message)=>message.sender)
+    messages:Chat[]
 
     @CreateDateColumn({
         type: 'timestamp',
@@ -45,17 +55,21 @@ export class Customer {
       })
       updatedAt: Date;
 
-
-
+    @DeleteDateColumn({
+      type: 'timestamp',
+      name: 'deleted_at',
+      default:null
+    })  
+    deletedAt:Date
 
       @BeforeInsert()
       @BeforeUpdate()
       async hashPassword()
       {
-        console.log(this.password)
+        
         if (this.password && !this.password.startsWith('$2b$')) {  
             this.password = await bcrypt.hash(this.password, 10);
-            console.log("Password hashed:", this.password);
+           
         }
       }
 
